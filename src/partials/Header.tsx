@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { routes } from '../utils/routeLocalize';
+import { routes, currentLang } from '../utils/routeLocalize';
 import LanguageChooser from '../parts/LanguageChooser';
 
 export default function Header() {
@@ -29,7 +29,7 @@ export default function Header() {
       fixed="top"
     >
       <Container fluid>
-        <Navbar.Brand className="me-5" as={Link} to="/">
+        <Navbar.Brand className="me-5" as={Link} to={'/' + currentLang()}>
           The Good Grocery
         </Navbar.Brand>
         <Navbar.Toggle onClick={() => setExpanded(!expanded)} />
