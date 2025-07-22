@@ -214,5 +214,25 @@
   "pot": {
     "sv": "kruka",
     "no": "potte"
+  },
+  "Vegetables": {
+    "sv": "Grönsaker",
+    "no": "Grønnsaker"
+  },
+  "Spices": {
+    "sv": "Kryddor",
+    "no": "Krydder"
+  },
+  "Bread & rice": {
+    "sv": "Bröd & ris",
+    "no": "Brød & ris"
+  },
+  "Canned food": {
+    "sv": "Konserver",
+    "no": "Hermetikk"
+  },
+  "All": {
+    "sv": "Alla",
+    "no": "Alle"
   }
 }
