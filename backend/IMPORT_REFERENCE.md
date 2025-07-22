@@ -2,7 +2,7 @@
 
 ## What was imported
 
-1. **Animals** (10 records)
+1. **Animals** (225 records)
    - Fields: id, name, slug, description, wikiUrl, imageAspectRatio, category
    - Multilingual fields: name, description, category
 
@@ -42,7 +42,7 @@ To add more translations, edit the `createMultilingualJson` function in `import-
 
 ## Notes
 
-- Only first 10 animals were imported (for demo). To import all, remove `.slice(0, 10)` from the animals import
+- All 225 animals are imported with full translations in English, Swedish, and Norwegian
 - The backend automatically extracts the correct language from JSON fields
 - If a translation is missing, it falls back to English
 - All multilingual fields are stored as JSON with structure: `{"en": "...", "sv": "...", "no": "..."}`

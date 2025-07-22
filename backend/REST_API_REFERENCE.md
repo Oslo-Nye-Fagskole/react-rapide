@@ -58,6 +58,65 @@
 **Fields**: frameSpecId, basePrice
 **No multilingual fields**
 
+### 5. Frame Cart Operations
+**Base Routes**: Cart operations for the frame shopping system
+
+- `POST /api/add-frame-to-cart` - Add frame configuration to cart
+- `GET /api/frame-cart` - View current cart contents
+- `PUT /api/update-frame-in-cart` - Update quantity of item in cart
+- `DELETE /api/remove-frame-from-cart/:orderLineId` - Remove specific item from cart
+- `DELETE /api/frame-cart` - Empty the entire cart
+
+**Request Examples:**
+
+**Add to Cart:**
+```json
+POST /api/add-frame-to-cart
+{
+  "animalId": 1,
+  "frameSpecId": "large-portrait",
+  "frameMaterialId": "black-wood", 
+  "withMat": true,
+  "quantity": 1
+}
+```
+
+**Update Quantity:**
+```json
+PUT /api/update-frame-in-cart
+{
+  "orderLineId": 1,
+  "quantity": 2
+}
+```
+
+**Response Format:** All cart operations return the updated cart contents with items and total:
+```json
+[
+  {
+    "itemType": "ITEM",
+    "orderLineId": 1,
+    "quantity": 1,
+    "unitPrice": 35.99,
+    "totalPrice": 35.99,
+    "withMat": 1,
+    "animalName": "Aardvark",
+    "frameSpecName": "Large Portrait",
+    "materialName": "Black Wood",
+    "... (all frame details)"
+  },
+  {
+    "itemType": "TOTAL",
+    "orderId": 26,
+    "quantity": 1,
+    "totalPrice": 35.99
+  }
+]
+```
+
+### 6. Utility Endpoints
+- `GET /api/exchange-rates` - Get current USD to NOK/SEK exchange rates
+
 ## Language Support
 
 **Supported languages**: 
@@ -85,6 +144,8 @@
 | POST (create) | ❌ | ❌ | ✅ |
 | PUT (update) | ❌ | ❌ | ✅ |
 | DELETE | ❌ | ❌ | ✅ |
+| **Cart Operations** | ✅ | ✅ | ✅ |
+| Exchange rates | ✅ | ✅ | ✅ |
 
 ### ACL Rules Added
 - **Read access**: All users (including visitors) can read all animal, frame specification, material, and pricing data

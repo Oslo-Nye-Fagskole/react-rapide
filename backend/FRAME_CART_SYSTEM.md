@@ -18,7 +18,7 @@ CREATE TABLE orderLines (
   animalId INTEGER NOT NULL,           -- Links to animals table
   frameSpecId TEXT NOT NULL,           -- Links to frameSpecifications table
   frameMaterialId TEXT NOT NULL,       -- Links to frameMaterials table
-  withMat BOOLEAN NOT NULL DEFAULT 1,  -- Mat option
+  withMat INTEGER NOT NULL DEFAULT 1,  -- Mat option (1=with mat, 0=without mat)
   quantity INTEGER NOT NULL DEFAULT 1, -- Quantity of this exact configuration
   unitPrice REAL NOT NULL,            -- Calculated price per unit
   totalPrice REAL NOT NULL,           -- unitPrice * quantity
@@ -89,6 +89,7 @@ Provides order totals: item count, total quantity, total amount.
   },
   {
     "itemType": "TOTAL",
+    "orderId": 26,
     "quantity": 3,
     "totalPrice": 847.50
   }
@@ -183,6 +184,19 @@ const getCart = async (language = 'en') => {
   return response.json();
 };
 ```
+
+## Recent Updates
+
+### v1.1 - SQLite Compatibility & Response Cleanup
+- **Fixed**: Boolean values converted to INTEGER (1/0) for SQLite compatibility
+- **Improved**: TOTAL items in cart responses now have null values filtered out for cleaner JSON
+- **Maintained**: All functionality and API compatibility
+
+### Response Cleanup
+The system automatically removes null properties from TOTAL summary items, resulting in cleaner responses:
+
+**Before**: TOTAL items had 20+ null properties  
+**After**: TOTAL items only include relevant fields (`orderId`, `quantity`, `totalPrice`, `itemType`)
 
 ## Migration Notes
 

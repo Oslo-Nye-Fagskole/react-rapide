@@ -50,7 +50,7 @@ export default function addSpecialRoutes() {
 
   // Add frame configuration to cart
   this.app.post(this.prefix + 'add-frame-to-cart', async (req, res) => {
-    updateOrderWithUserId(req);
+    await updateOrderWithUserId.call(this, req);
 
     let { animalId, frameSpecId, frameMaterialId, withMat, quantity } = req.body || {};
     
@@ -61,7 +61,7 @@ export default function addSpecialRoutes() {
     }
 
     // Set defaults
-    withMat = withMat !== false; // Default to true
+    withMat = withMat !== false ? 1 : 0; // Convert boolean to integer (1/0)
     quantity = quantity || 1;
 
     // Get pricing information
@@ -71,7 +71,6 @@ export default function addSpecialRoutes() {
       JOIN frameMaterials fm ON fm.id = :frameMaterialId 
       WHERE fp.frameSpecId = :frameSpecId
     `, { frameSpecId, frameMaterialId });
-
     if (pricingInfo.length === 0) {
       res.json({ error: 'Invalid frame specification or material combination!' });
       return;
@@ -121,12 +120,24 @@ export default function addSpecialRoutes() {
 
     // Return updated cart
     const cart = await this.db.query('', '', getFrameCartSelect(req), { orderId });
-    res.json(cart);
+    
+    // Clean up null values from TOTAL items
+    const cleanedCart = cart.map(item => {
+      if (item.itemType === 'TOTAL') {
+        // Remove null properties from TOTAL items
+        return Object.fromEntries(
+          Object.entries(item).filter(([key, value]) => value !== null)
+        );
+      }
+      return item;
+    });
+    
+    res.json(cleanedCart);
   });
 
   // Get frame cart
   this.app.get('/api/frame-cart', async (req, res) => {
-    updateOrderWithUserId(req);
+    await updateOrderWithUserId.call(this, req);
     
     const sessionId = req.sessionID;
     const userId = req.session.user ? req.session.user.id : null;
@@ -146,7 +157,17 @@ export default function addSpecialRoutes() {
     if (cart.length === 0) {
       res.json({ status: 'The cart is empty.' });
     } else {
-      res.json(cart);
+      // Clean up null values from TOTAL items
+      const cleanedCart = cart.map(item => {
+        if (item.itemType === 'TOTAL') {
+          // Remove null properties from TOTAL items
+          return Object.fromEntries(
+            Object.entries(item).filter(([key, value]) => value !== null)
+          );
+        }
+        return item;
+      });
+      res.json(cleanedCart);
     }
   });
 
@@ -194,7 +215,19 @@ export default function addSpecialRoutes() {
 
     // Return updated cart
     const cart = await this.db.query('', '', getFrameCartSelect(req), { orderId: orderLine.orderId });
-    res.json(cart);
+    
+    // Clean up null values from TOTAL items
+    const cleanedCart = cart.map(item => {
+      if (item.itemType === 'TOTAL') {
+        // Remove null properties from TOTAL items
+        return Object.fromEntries(
+          Object.entries(item).filter(([key, value]) => value !== null)
+        );
+      }
+      return item;
+    });
+    
+    res.json(cleanedCart);
   });
 
   // Remove frame from cart
