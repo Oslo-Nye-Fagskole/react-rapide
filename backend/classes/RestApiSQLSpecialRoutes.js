@@ -7,8 +7,10 @@
 function getOrderSummarySelect(req) {
   return `SELECT * FROM (SELECT id, created, productId, JSON_EXTRACT(productName, '$.${req.lang}')
     AS productName, quantity, productPrice$, rowSum$, orderLineId FROM orderRowSums
+    WHERE id = :orderId
     UNION
-    SELECT *, null FROM orderTotals)
+    SELECT *, null FROM orderTotals
+    WHERE id = :orderId)
     ORDER BY id, CASE WHEN productPrice$ IS NOT NULL THEN 0 ELSE 1 END, orderLineId
   `;
 }
@@ -34,7 +36,7 @@ export default function addSpecialRoutes() {
     const sessionId = req.sessionID;
     const userId = req.session.user ? req.session.user.id : null;
     let orderId = (await this.db.query('', '',
-      'SELECT id FROM orders WHERE paid IS NULL AND (sessionId = :sessionId OR userId = :userId)',
+      'SELECT id FROM orders WHERE paid IS NULL AND (sessionId = :sessionId OR userId = :userId) ORDER BY userId DESC LIMIT 1',
       { sessionId, userId }
     ))[0]?.id;
     if (!orderId) {
@@ -167,7 +169,7 @@ async function updateOrderWithUserId(req) {
   const userId = req.session.user ? req.session.user.id : null;
   if (sessionId && userId) {
     await this.db.query(req.method, req.url,
-      'UPDATE orders SET userId = :userId WHERE userId IS NULL AND sessionId = :sessionid',
+      'UPDATE orders SET userId = :userId WHERE userId IS NULL AND sessionId = :sessionId',
       { sessionId, userId }
     );
   }

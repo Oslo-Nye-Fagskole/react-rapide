@@ -100,7 +100,7 @@ export default class RestApi {
       const selectFrom = this.convertToLangJsonAware(req.lang, `SELECT * FROM ${table}`);
       const result = await this.db.query(req.method, req.url,/*sql*/`
         ${selectFrom}
-        WHERE id = : id
+        WHERE id = :id
         `, { id });
       this.sendJsonResponse(res, result, true);
     });
@@ -116,7 +116,7 @@ export default class RestApi {
       const result = await this.db.query(req.method, req.url,/*sql*/`
         UPDATE ${table}
         SET ${Object.keys(body).map(x => x + '= :' + x).join(', ')}
-        WHERE id = : id
+        WHERE id = :id
         `, { id, ...body });
       this.sendJsonResponse(res, result);
     });
@@ -128,15 +128,15 @@ export default class RestApi {
       const { table, id } = req.params;
       const result = await this.db.query(req.method, req.url,/*sql*/`
         DELETE FROM ${table}
-        WHERE id = : id
+        WHERE id = :id
         `, { id });
       this.sendJsonResponse(res, result);
     });
   }
 
   convertToLangJsonAware(lang, sqlPart) {
-    if (sqlPart.endsWith('products')) {
-      sqlPart = `
+    if (sqlPart.includes('FROM products')) {
+      sqlPart = sqlPart.replace('SELECT * FROM products', `
         SELECT id, COALESCE(
           JSON_EXTRACT(name, '$.${lang}'),
           JSON_EXTRACT(name, '$.en')
@@ -147,7 +147,7 @@ export default class RestApi {
         ) as description,
         quantity, price$, slug, categories
         FROM products
-      `;
+      `);
     }
     return sqlPart;
   }
