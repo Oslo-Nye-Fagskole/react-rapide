@@ -33,9 +33,8 @@ This reference covers all the API endpoints available for building an anonymous 
 
 ### 4. Frame Pricing API
 **Get pricing information:**
-- `GET /api/en/framePricing` - Get all frame pricing
-- `GET /api/sv/framePricing` - Get all frame pricing
-- `GET /api/no/framePricing` - Get all frame pricing
+- `GET /api/framePricing` - Get all frame pricing
+
 
 **Fields**: frameSpecId, basePrice
 
@@ -87,6 +86,7 @@ DELETE /api/frame-cart
 - `GET /api/exchange-rates` - Get USD to NOK/SEK rates
 
 ## Language Support
+**Note:** Names and categories, but not descriptions are translated for animals.
 
 **Available languages**:
 - `en` - English (default)
@@ -133,7 +133,7 @@ DELETE /api/frame-cart
     "material": "Wood",
     "color": "Black",
     "style": "Modern",
-    "cssBackground": "radial-gradient(ellipse at center, #2c2c2c 0%, #1a1a1a 70%, #000000 100%)"
+    "cssBackground": "radial-gradient…"
   },
   {
     "itemType": "TOTAL",
@@ -149,20 +149,22 @@ DELETE /api/frame-cart
 ### Step 1: Display Animals
 Fetch and display all animals for users to browse:
 ```javascript
-const animals = await fetch('/api/en/animals').then(r => r.json());
+const animals = await(await fetch('/api/en/animals')).json();
 ```
 
 ### Step 2: Show Frame Options
 When user selects an animal, show frame and material options:
 ```javascript
-const frameSpecs = await fetch('/api/en/frameSpecifications').then(r => r.json());
-const materials = await fetch('/api/en/frameMaterials').then(r => r.json());
+const frameSpecs =
+  await(await fetch('/api/en/frameSpecifications')).json();
+const materials =
+  await(await fetch('/api/en/frameMaterials')).json();
 ```
 
 ### Step 3: Add to Cart
-When user configures their frame, add it to cart:
+When a user has configured their frame, add it to cart:
 ```javascript
-const response = await fetch('/api/add-frame-to-cart', {
+const cart = await(await fetch('/api/add-frame-to-cart', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -172,14 +174,13 @@ const response = await fetch('/api/add-frame-to-cart', {
     withMat: includeMat,
     quantity: 1
   })
-});
-const updatedCart = await response.json();
+})).json();
 ```
 
 ### Step 4: Display Cart
-Show cart contents and allow quantity updates:
+Get the cart contents:
 ```javascript
-const cart = await fetch('/api/frame-cart').then(r => r.json());
+const cart = await(await fetch('/api/frame-cart').json();
 ```
 
 ## Pricing Logic
