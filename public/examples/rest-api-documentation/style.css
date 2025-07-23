@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+body {
+  font-family: 'Open Sans';
+  margin: 20px;
+  background-image: url('/animal-images/peafowl.webp');
+  background-attachment: fixed;
+  background-size: cover;
+  font-size: 18px;
+}
+
+main {
+  background-color: rgba(255, 255, 255, 1);
+  margin: 0 auto;
+  max-width: 700px;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+h1 {
+  line-height: 110%;
+}
+
+a {
+  color: #2855b8;
+}

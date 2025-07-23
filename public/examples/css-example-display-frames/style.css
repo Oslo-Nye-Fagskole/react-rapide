@@ -14,7 +14,7 @@ html {
 /* 50 x 70 frame portrait mode */
 .frame-holder {
   /* Container for the entire frame - can be any width
-     (in any unit, perctange, pixels etc)
+     (in any unit, percentage, pixels etc)
      All internal elements scale proportionally using percentages.
      Works great in Bootstrap columns, flexbox, CSS Grid, etc. */
   width: 300px;
