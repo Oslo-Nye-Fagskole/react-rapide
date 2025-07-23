@@ -2,6 +2,8 @@
 
 This reference covers all the API endpoints available for building an anonymous shopping experience.
 
+**Tip:** To view JSON from GET-routes in a nice way in Chrome/Edge you can install [JSON Formatter](https://chromewebstore.google.com/detail/json-formatter/bcjindcccaagfpapjjmafapmmgkkhgoa).
+
 ## Available API Endpoints
 
 ### 1. Animals API
