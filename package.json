@@ -1,17 +1,17 @@
 {
-  "name": "react-rapide",
+  "name": "@oslo-nye-fagskole/react-rapide",
   "type": "module",
   "version": "1.0.35",
   "main": "index.js",
-  "author": "ironboy",
+  "author": "Oslo Nye Fagskole",
   "license": "MIT",
   "description": "Fast scaffolding for Vite-based React projects with TypeScript.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ironboy/react-rapide.git"
+    "url": "git+https://github.com/Oslo-Nye-Fagskole/react-rapide.git"
   },
   "bugs": {
-    "url": "https://github.com/ironboy/react-rapide/issues"
+    "url": "https://github.com/Oslo-Nye-Fagskole/react-rapide/issues"
   },
   "keywords": [
     "React",
