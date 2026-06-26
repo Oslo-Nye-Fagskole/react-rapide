@@ -1,4 +1,3 @@
-// react-rapide, ironboy 2025
 import fs from 'fs';
 import path from 'path';
 import { getFolderOfBranch } from './helpers.js';
@@ -7,7 +6,7 @@ const tempDir = path.join(dirname, 'temp');
 
 async function start() {
   cleanup();
-  let ok = await getFolderOfBranch(tempDir, 'ironboy', 'react-rapide', 'app');
+  let ok = await getFolderOfBranch(tempDir, 'Oslo-Nye-Fagskole', 'react-rapide', 'app');
   ok && await import('./temp/react-rapide-app/index.js');
 }
 
