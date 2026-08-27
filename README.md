@@ -9,7 +9,7 @@ React Rapide is designed for existing React projects created with Vite. Before i
 Example:
 
 ```bash
-npm create vite@latest my-app -- --template react-ts
+npm create vite@7.3 my-app -- --template react-ts
 cd my-app
 npm install
 ```
