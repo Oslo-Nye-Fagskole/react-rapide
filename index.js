@@ -17,7 +17,7 @@ const rapideBaseDir = path.join(dirname, '..', '..');
 const teacherTokenFile = path.join(rapideBaseDir, '.teacher-token');
 const undoFolder = path.join(rapideBaseDir, 'undoFiles');
 const arg = process.argv.slice(2)[0] || 'helpFast';
-let commandBranches = await getBranches('ironboy', 'react-rapide', (x) => x.startsWith('command-'));
+let commandBranches = await getBranches('Oslo-Nye-Fagskole', 'react-rapide', (x) => x.startsWith('command-'));
 
 let teacherToken;
 if (fs.existsSync(teacherTokenFile)) {
@@ -94,7 +94,7 @@ async function help() {
     if (!name) { continue; }
     log('');
     log(c.bold(c.green(name)));
-    log(await getReadMeOfBranch('ironboy', 'react-rapide', branch, teacherToken));
+    log(await getReadMeOfBranch('Oslo-Nye-Fagskole', 'react-rapide', branch, teacherToken));
   }
   log('');
 }
@@ -131,7 +131,7 @@ async function runCommand(command) {
     return;
   }
   let branch = commandBranches[index];
-  await getFolderOfBranch(tempDir, 'ironboy', 'react-rapide', branch, teacherToken);
+  await getFolderOfBranch(tempDir, 'Oslo-Nye-Fagskole', 'react-rapide', branch, teacherToken);
   let baseDir = dirname.slice(0, dirname.lastIndexOf('node_modules'));
   while (baseDir.endsWith('/') || baseDir.endsWith('\\')) { baseDir = baseDir.slice(0, -1); }
   let remoteBaseDir = path.join(tempDir, 'react-rapide-' + branch);
