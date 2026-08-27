@@ -1,7 +1,7 @@
 {
   "name": "@oslo-nye-fagskole/react-rapide",
   "type": "module",
-  "version": "1.0.37",
+  "version": "1.0.38",
   "main": "index.js",
   "author": "Oslo Nye Fagskole",
   "license": "MIT",
