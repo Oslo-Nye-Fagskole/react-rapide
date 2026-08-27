@@ -6,7 +6,6 @@ import url from 'url';
 import prompts from 'prompts';
 import { execSync } from 'child_process';
 import { getBranches, getReadMeOfBranch, getFolderOfBranch } from './helpers.js';
-import { teacherLogin, teacherLogout, decryptToken } from './auth.js';
 import autoGenerateRoutes from './auto-generate-routes.js';
 import createServer from './server.js';
 
@@ -14,19 +13,9 @@ const log = (...x) => console.log(...x);
 const dirname = import.meta.dirname;
 const tempDir = path.join(dirname, '..');
 const rapideBaseDir = path.join(dirname, '..', '..');
-const teacherTokenFile = path.join(rapideBaseDir, '.teacher-token');
 const undoFolder = path.join(rapideBaseDir, 'undoFiles');
 const arg = process.argv.slice(2)[0] || 'helpFast';
-let commandBranches = await getBranches('Oslo-Nye-Fagskole', 'react-rapide', (x) => x.startsWith('command-'));
-
-let teacherToken;
-if (fs.existsSync(teacherTokenFile)) {
-  const token = decryptToken(fs.readFileSync(teacherTokenFile, 'utf-8'));
-  teacherToken = token;
-  let add = await getBranches('ironboy', 'react-rapide-teacher', (x) => x.startsWith('command-'), token);
-  add = add.map(x => x.replace(/(command-\d*-)/g, '$1teacher-'));
-  commandBranches = [...commandBranches, ...add];
-}
+const commandBranches = await getBranches('Oslo-Nye-Fagskole', 'react-rapide', (x) => x.startsWith('command-'));
 
 const commands = commandBranches.map(x => x.split('command-')[1].split(/\d{1,}-/)[1]).filter(x => x);
 const defaultPostDo = {
@@ -94,7 +83,7 @@ async function help() {
     if (!name) { continue; }
     log('');
     log(c.bold(c.green(name)));
-    log(await getReadMeOfBranch('Oslo-Nye-Fagskole', 'react-rapide', branch, teacherToken));
+    log(await getReadMeOfBranch('Oslo-Nye-Fagskole', 'react-rapide', branch));
   }
   log('');
 }
@@ -117,8 +106,6 @@ async function runCommand(command) {
   let mainRapide = fs.readFileSync(path.join(dirname, './main-rapide.tsx'), 'utf-8');
   mainRapide = mainRapide.replaceAll('[[command]]', command);
   command !== 'helpFast' && log(c.green(c.bold(('REACT RAPIDE: ' + command))));
-  if (command === 'teacher-login') { await teacherLogin(); return; }
-  if (command === 'teacher-logout') { await teacherLogout(); return; }
   if (command === 'helpFast') { helpFast(); return; }
   if (command === 'help') { await help(); return; }
   if (command === 'undo') { undo(); return; }
@@ -131,13 +118,10 @@ async function runCommand(command) {
     return;
   }
   let branch = commandBranches[index];
-  await getFolderOfBranch(tempDir, 'Oslo-Nye-Fagskole', 'react-rapide', branch, teacherToken);
+  await getFolderOfBranch(tempDir, 'Oslo-Nye-Fagskole', 'react-rapide', branch);
   let baseDir = dirname.slice(0, dirname.lastIndexOf('node_modules'));
   while (baseDir.endsWith('/') || baseDir.endsWith('\\')) { baseDir = baseDir.slice(0, -1); }
   let remoteBaseDir = path.join(tempDir, 'react-rapide-' + branch);
-  if (remoteBaseDir.includes('teacher-')) {
-    remoteBaseDir = path.join(tempDir, 'react-rapide-teacher-' + branch.replace(/teacher-/, ''));
-  }
   let func = (await import(url.pathToFileURL(path.join(remoteBaseDir, 'z-rapide.js')))).default;
   let result = func() || {};
   let postDo = { ...defaultPostDo, ...result };
